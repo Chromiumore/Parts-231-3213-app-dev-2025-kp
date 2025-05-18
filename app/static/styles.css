@@ -1,0 +1,15 @@
+.game-card{
+    transition: transform 0.2s;
+    margin-bottom: 20px;
+}
+.game-card:hover{
+    transform: scale(1.03);
+}
+.os-icon{
+    font-size: 1.5rem;
+    margin-right: 5px;
+}
+.search-box{
+    max-width: 400px;
+    margin: 0 auto;
+}
