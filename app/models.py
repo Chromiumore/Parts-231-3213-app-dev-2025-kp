@@ -35,7 +35,7 @@ class Role(Base):
     description: Mapped[str] = mapped_column(Text())
 
 class Game(Base):
-    __table__ = 'games'
+    __tablename__ = 'games'
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
