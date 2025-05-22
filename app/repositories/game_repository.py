@@ -13,6 +13,10 @@ class GameRepository:
         query = self.db.select(Game).join(User, Game.user_id == User.id).where(Game.id == id)
         return self.db.session.execute(query).first()
     
+    def get_games_by_user_id(self, user_id):
+        query = self.db.select(Game).where(User.id == user_id)
+        return self.db.session.execute(query).all()
+    
     def create(self, id, name, user_id, description, info, created_at, last_updated_at):
         game = Game(
             id=id,
@@ -28,3 +32,4 @@ class GameRepository:
             self.db.session.rollback()
             raise e
         return game
+

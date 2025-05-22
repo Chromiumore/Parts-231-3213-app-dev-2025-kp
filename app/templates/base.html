@@ -23,7 +23,7 @@
                     </a>
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-4">
                         <li><a href="/" class="nav-link px-2 text-white">Explore</a></li>
-                        <li><a href="/upload" class="nav-link px-2 text-white">Creator Hub</a></li>
+                        <li><a href="{{ url_for('games.creator_hub') }}" class="nav-link px-2 text-white">Creator Hub</a></li>
                     </ul>
                 </div>
 
@@ -37,8 +37,12 @@
 
                 <!-- Right links -->
                 <div class="text-end">
-                    <a href="/login" class="btn btn-outline-light me-2">Sign In</a>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light me-2">Sign In</a>
                     <a href="/register" class="btn btn-warning">Sign Up</a>
+                    {% else %}
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-warning">Logout</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+from typing import Optional
 
 from flask import url_for
 from flask_login import UserMixin
@@ -31,7 +32,8 @@ class Role(Base):
     __tablename__ = 'roles'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(40))
+    name: Mapped[Optional[str]] = mapped_column(String(20), unique=True)
+    display_name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str] = mapped_column(Text())
 
 class Game(Base):
@@ -40,8 +42,8 @@ class Game(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    description: Mapped[str] = mapped_column(String(150))
-    info: Mapped[str] = mapped_column(Text())
+    description: Mapped[Optional[str]] = mapped_column(String(150))
+    info: Mapped[Optional[str]] = mapped_column(Text())
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
     last_updated_at: Mapped[datetime] = mapped_column(default=datetime.now)
 

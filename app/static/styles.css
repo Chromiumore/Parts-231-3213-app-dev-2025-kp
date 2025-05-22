@@ -13,3 +13,17 @@
     max-width: 400px;
     margin: 0 auto;
 }
+
+.developer-header {
+    background-color: #f8f9fa;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+}
+.upload-btn {
+    font-size: 1.1rem;
+    padding: 10px 25px;
+}
+.stats-card {
+    border-left: 4px solid #0d6efd;
+}
