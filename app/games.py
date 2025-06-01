@@ -62,7 +62,7 @@ def upload():
         else:
             flash('Не удалось загрузить игру. Попробуйте позже', 'success')
     
-    os = os_repository.all()
+    os = os_repository.get_all_and_game_has_by_id()
     return render_template('upload.html', os=os)
 
 @bp.route('/creatorhub/update/<game_id>', methods=['POST', 'GET'])
