@@ -1,4 +1,4 @@
-{% macro create_from(action, game=None) %}
+{% macro create_from(action, game=None, os=None) %}
 <div class="row justify-content-center">
     <div class="col-lg-10">
         <h1 class="mb-4 text-center">
@@ -37,24 +37,15 @@
                 <div class="mb-4">
                     <label class="form-label required">Поддерживаемые платформы</label>
                     <div>
+                        {% for el in os %}
                         <div class="form-check os-checkbox">
-                            <input class="form-check-input" type="checkbox" id="windowsCheck">
-                            <label class="form-check-label" for="windowsCheck">
-                                <i class="fab fa-windows me-1"></i> Windows
+                            <input class="form-check-input" type="checkbox" name="os-list"
+                            id="{{ el[0].name }}Check" value="{{ el[0].id }}" {% if el[1] %} checked {% endif %}>
+                            <label class="form-check-label" for="{{ el[0].name }}Check">
+                                <i class="fab fa-{{ el[0].fa_icon_name }} me-1"></i> {{ el[0].display_name }}
                             </label>
                         </div>
-                        <div class="form-check os-checkbox">
-                            <input class="form-check-input" type="checkbox" id="macCheck">
-                            <label class="form-check-label" for="macCheck">
-                                <i class="fab fa-apple me-1"></i> macOS
-                            </label>
-                        </div>
-                        <div class="form-check os-checkbox">
-                            <input class="form-check-input" type="checkbox" id="linuxCheck">
-                            <label class="form-check-label" for="linuxCheck">
-                                <i class="fab fa-linux me-1"></i> Linux
-                            </label>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
                 

@@ -3,21 +3,22 @@ from functools import wraps
 from datetime import datetime
 from flask import Blueprint, render_template, make_response, request, flash, redirect, url_for, abort
 from flask_login import login_required, current_user
-from .repositories.game_repository import GameRepository
+from .repositories.game_repository import GameRepository, Game
 from .repositories.user_repository import UserRepository
-from .models import db, Game
+from .repositories.os_repository import OSRepository
+from .models import db
 
 bp = Blueprint('games', __name__)
 
 game_repository = GameRepository(db)
 user_repository = UserRepository(db)
+os_repository = OSRepository(db)
 
 def user_has_rights(func):
     @wraps(func)
     def inner(game_id):
         user_id = current_user.id
         game = game_repository.get_game_by_id(game_id)
-        print(game_id, game, user_id)
         if game is None or game.user_id == user_id:
             return func(game_id)
         else:
@@ -43,6 +44,7 @@ def creator_hub():
 def upload():
     if request.method == 'POST':
         form = request.form
+        os_ids = form.getlist('os-list')
         new_game = Game(
             name = form.get('name'),
             user_id = current_user.id,
@@ -50,7 +52,9 @@ def upload():
             info = form.get('info')
         )
 
-        is_successful = game_repository.create(new_game)
+        os_list = list(map(os_repository.get_by_id, os_ids))
+
+        is_successful = game_repository.create(new_game, os_list)
 
         if is_successful:
             flash('Игра успешно загружена', 'success')
@@ -58,7 +62,8 @@ def upload():
         else:
             flash('Не удалось загрузить игру. Попробуйте позже', 'success')
     
-    return render_template('upload.html')
+    os = os_repository.all()
+    return render_template('upload.html', os=os)
 
 @bp.route('/creatorhub/update/<game_id>', methods=['POST', 'GET'])
 @login_required
@@ -85,7 +90,9 @@ def update(game_id):
             else:
                 flash('Не удалось загрузить игру. Попробуйте позже', 'success')
 
-    return render_template('update.html', game=game) 
+    os_info = os_repository.get_all_and_game_has_by_id(game_id)
+    print(os_info)
+    return render_template('update.html', game=game, os=os_info) 
 
 @bp.route('/creatorhub/delete/<game_id>', methods=['GET'])
 @login_required

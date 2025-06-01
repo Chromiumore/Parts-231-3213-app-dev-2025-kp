@@ -1,5 +1,6 @@
-from app.models import Game, User
+from app.models import Game, User, OS
 from flask_sqlalchemy import SQLAlchemy
+from .os_repository import OSRepository
 
 class GameRepository:
     def __init__(self, db):
@@ -16,9 +17,16 @@ class GameRepository:
     def get_games_by_user_id(self, user_id):
         query = self.db.select(Game).where(Game.user_id == user_id)
         return self.db.session.execute(query).scalars()
+
+    def get_game_and_user_by_id(self, id):
+        query = self.db.select(Game, OS, User).join(OS.games).join(User, User.id == Game.user_id).where(Game.id == id)
+        return self.db.session.execute(query).all()
     
-    def create(self, game):
+    def create(self, game, os_list):
         try:
+            for os in os_list:
+                os.games.append(game)
+                self.db.session.flush()
             self.db.session.add(game)
             self.db.session.commit()
         except Exception as e:
