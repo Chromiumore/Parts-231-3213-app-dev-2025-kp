@@ -23,14 +23,31 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        remember_me = request.form.get('remember_me')
         if username and password:
             user = user_repository.get_user_by_username_and_password(username, password)
             if user:
-                login_user(user)
+                login_user(user, remember=remember_me)
                 flash('Вы успешно аутентифицированы.', 'success')
                 return redirect(url_for('games.index'))
         flash('Введены неверные логин и/или пароль.', 'danger')
     return render_template('login.html')
+
+@bp.route('/registration', methods=['POST', 'GET'])
+def registration():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        password_conf = request.form.get('password-confirm')
+        remember_me = request.form.get('remember_me')
+        if username and password and (password == password_conf):
+            user = user_repository.create(username, password, 'default')
+            if user:
+                login_user(user, remember=remember_me)
+                flash('Вы успешно зарегистрировались.', 'success')
+                return redirect(url_for('games.index'))
+        flash('Не удалось зарегистрироваться. Проверьте правильность заполнения полей', 'danger')
+    return render_template('registration.html')
 
 @bp.route('/logout')
 @login_required

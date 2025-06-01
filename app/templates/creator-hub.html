@@ -11,8 +11,8 @@
                 <h1 class="mb-1">{{ user.username }}</h1>
             </div>
             <div class="col-md-4">
-                <a href="/upload-game" class="btn btn-primary upload-btn">
-                    <i class="fas fa-cloud-upload-alt me-2"></i>Загрузить новую игру
+                <a href="{{ url_for('games.upload') }}" class="btn btn-primary upload-btn">
+                    <i class="fas fa-cloud-upload-alt me-2"></i>Загрузить игру
                 </a>
             </div>
         </div>
@@ -39,9 +39,9 @@
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="game2Dropdown">
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Редактировать</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('games.update', game_id=game.id) }}"><i class="fas fa-edit me-2"></i>Редактировать</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Удалить</a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ url_for('games.delete', game_id=game.id) }}"><i class="fas fa-trash me-2"></i>Удалить</a></li>
                             </ul>
                         </div>
                     </div>

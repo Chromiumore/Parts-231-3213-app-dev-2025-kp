@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% from 'game-form.html' import create_from %}
+
+{% block content %}
+{{ create_from('update', game) }}
+{% endblock %}

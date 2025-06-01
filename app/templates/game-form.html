@@ -1,0 +1,118 @@
+{% macro create_from(action, game=None) %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <h1 class="mb-4 text-center">
+            {% if action == 'upload' %}
+            Загрузить игру
+            {% else %}
+            Обновить игру
+            {% endif %}
+        </h1>
+        
+        <div class="upload-section">
+            <form id="gameUploadForm" method="post">
+                <!-- Название игры -->
+                <div class="mb-4">
+                    <label for="name" class="form-label required">Название игры</label>
+                    <input type="text" class="form-control" name="name"id="name"
+                    placeholder="Введите название игры" value="{{ game.name or '' }}" required>
+                </div>
+                
+                <!-- Краткое описание -->
+                <div class="mb-4">
+                    <label for="description" class="form-label required">Краткое описание</label>
+                    <textarea class="form-control" name="description" id="description" rows="3"
+                    placeholder="Кратко опишите вашу игру">{{ game.description or '' }}</textarea>
+                </div>
+                
+                <!-- Полное описание -->
+                <div class="mb-4">
+                    <label for="info" class="form-label required">Полное описание</label>
+                    <textarea class="form-control" name="info" id="info" rows="6"
+                    placeholder="Подробно опишите вашу игру, её особенности, геймплей и т.д.">{{ game.info or '' }}</textarea>
+                    <div class="form-text">Используйте Markdown для форматирования текста</div>
+                </div>
+                
+                <!-- Поддерживаемые ОС -->
+                <div class="mb-4">
+                    <label class="form-label required">Поддерживаемые платформы</label>
+                    <div>
+                        <div class="form-check os-checkbox">
+                            <input class="form-check-input" type="checkbox" id="windowsCheck">
+                            <label class="form-check-label" for="windowsCheck">
+                                <i class="fab fa-windows me-1"></i> Windows
+                            </label>
+                        </div>
+                        <div class="form-check os-checkbox">
+                            <input class="form-check-input" type="checkbox" id="macCheck">
+                            <label class="form-check-label" for="macCheck">
+                                <i class="fab fa-apple me-1"></i> macOS
+                            </label>
+                        </div>
+                        <div class="form-check os-checkbox">
+                            <input class="form-check-input" type="checkbox" id="linuxCheck">
+                            <label class="form-check-label" for="linuxCheck">
+                                <i class="fab fa-linux me-1"></i> Linux
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Основное изображение -->
+                <div class="mb-4">
+                    <label for="mainImage" class="form-label required">Основное изображение</label>
+                    <div class="file-upload-box" onclick="document.getElementById('mainImage').click()">
+                        <i class="fas fa-image fa-3x mb-3 text-muted"></i>
+                        <p class="mb-1">Перетащите сюда файл или нажмите для выбора</p>
+                        <p class="small text-muted">Рекомендуемый размер: 400x225px</p>
+                        <input type="file" id="mainImage" name="main-image" accept="image/*" style="display: none;">
+                    </div>
+                    <div id="mainImagePreview"></div>
+                </div>
+                
+                <!-- Скриншоты -->
+                <div class="mb-4">
+                    <label for="screenshots" class="form-label">Скриншоты</label>
+                    <div class="file-upload-box" onclick="document.getElementById('screenshots').click()">
+                        <i class="fas fa-images fa-3x mb-3 text-muted"></i>
+                        <p class="mb-1">Перетащите сюда файлы или нажмите для выбора</p>
+                        <input type="file" id="screenshots" name="screenshots" accept="image/*" multiple style="display: none;">
+                    </div>
+                    <div id="screenshotsPreview" class="mt-2"></div>
+                </div>
+                
+                <!-- Игровые файлы -->
+                <div class="mb-4">
+                    <label for="gameFiles" class="form-label required">Игровые файлы</label>
+                    <div class="file-upload-box" onclick="document.getElementById('gameFiles').click()">
+                        <i class="fas fa-file-archive fa-3x mb-3 text-muted"></i>
+                        <p class="mb-1">Перетащите сюда файлы или нажмите для выбора</p>
+                        <p class="small text-muted">Поддерживаемые форматы: .exe, .zip, .rar</p>
+                        <input type="file" id="gameFiles" name="game-files" accept=".exe,.zip,.rar" style="display: none;">
+                    </div>
+                    <div id="gameFilesPreview" class="mt-2"></div>
+                </div>
+                
+                <!-- Кнопки отправки -->
+                <div class="d-flex justify-content-end mt-5">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-cloud-upload-alt me-2"></i>
+                        {% if action == 'upload' %}
+                        Загрузить игру
+                        {% else %}
+                        Обновить игру
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block scripts %}
+    <script src="{{ url_for('static', filename='image_viewer.js') }}"></script>
+    {% endblock %}
+{% endmacro %}

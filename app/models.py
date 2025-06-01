@@ -26,13 +26,13 @@ class User(Base, UserMixin):
     username: Mapped[str] = mapped_column(String(25), unique=True)
     password_hash: Mapped[str] = mapped_column(String(256))
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
-    role_id: Mapped[int] = mapped_column(ForeignKey('roles.id'))
+    role_name: Mapped[str] = mapped_column(ForeignKey('roles.name'))
 
 class Role(Base):
     __tablename__ = 'roles'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[Optional[str]] = mapped_column(String(20), unique=True)
+    name: Mapped[str] = mapped_column(String(20), unique=True)
     display_name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str] = mapped_column(Text())
 
@@ -46,5 +46,11 @@ class Game(Base):
     info: Mapped[Optional[str]] = mapped_column(Text())
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
     last_updated_at: Mapped[datetime] = mapped_column(default=datetime.now)
+
+# class OS(Base):
+#     __tablename__ = 'os'
+
+#     id: Mapped[int] = mapped_column(primary_key=True)
+#     name: Mapped[str] = mapped_column(String(50), unique=True)
 
 # TODO Модель статистики

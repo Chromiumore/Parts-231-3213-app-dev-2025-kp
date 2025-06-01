@@ -6,6 +6,20 @@ class UserRepository:
     def __init__(self, db):
         self.db : SQLAlchemy = db
 
+    def create(self, username, password, role_name='default'):
+        user = User(
+            username=username,
+            password_hash=sha256(password.encode()).hexdigest(),
+            role_name=role_name
+        )
+        try:
+            self.db.session.add(user)
+            self.db.session.commit()
+        except Exception as e:
+            self.db.session.rollback()
+            raise e
+        return self.get_user_by_username_and_password(username, password)
+
     def all(self):
         query = self.db.select(User)
         return self.db.session.execute(query).all()

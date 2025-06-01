@@ -27,3 +27,38 @@
 .stats-card {
     border-left: 4px solid #0d6efd;
 }
+
+.upload-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+.form-label.required:after {
+    content: " *";
+    color: #dc3545;
+}
+.file-upload-box {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.file-upload-box:hover {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.05);
+}
+.os-checkbox {
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 10px;
+}
+.preview-image {
+    max-width: 100px;
+    max-height: 100px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
