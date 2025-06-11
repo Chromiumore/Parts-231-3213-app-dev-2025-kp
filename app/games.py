@@ -14,7 +14,7 @@ game_repository = GameRepository(db)
 user_repository = UserRepository(db)
 os_repository = OSRepository(db)
 
-def user_has_rights(func):
+def permission_required(func):
     @wraps(func)
     def inner(game_id):
         user_id = current_user.id
@@ -67,7 +67,7 @@ def upload():
 
 @bp.route('/creatorhub/update/<game_id>', methods=['POST', 'GET'])
 @login_required
-@user_has_rights
+@permission_required
 def update(game_id):
     game = game_repository.get_game_by_id(game_id)
     if not game:
@@ -96,7 +96,7 @@ def update(game_id):
 
 @bp.route('/creatorhub/delete/<game_id>', methods=['GET'])
 @login_required
-@user_has_rights
+@permission_required
 def delete(game_id):
     is_successful = game_repository.delete(game_id)
 
