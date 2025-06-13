@@ -1,11 +1,12 @@
 from datetime import datetime
 import os
 from typing import Optional, List
+import enum
 
 from flask import url_for
 from flask_login import UserMixin
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import MetaData, String, ForeignKey, Text, Table, Column
+from sqlalchemy import MetaData, String, ForeignKey, Text, Table, Column, Enum
 from flask_sqlalchemy import SQLAlchemy
 
 class Base(DeclarativeBase):
@@ -39,7 +40,7 @@ class Role(Base):
 GameOs = Table(
     'games_os',
     Base.metadata,
-    Column('game_id', ForeignKey('games.id'), primary_key=True),
+    Column('game_id', ForeignKey('games.id', ondelete='CASCADE'), primary_key=True),
     Column('os_id', ForeignKey('os.id'), primary_key=True)
 )
 
@@ -64,4 +65,16 @@ class OS(Base):
     fa_icon_name: Mapped[str] = mapped_column(String(50))
     games: Mapped[List['Game']] = relationship('Game', secondary=GameOs, back_populates='os_list')
 
-# TODO Модель статистики
+class FileType(enum.Enum):
+    MAIN_IMAGE = 'main_image'
+    SCREENSHOT = 'screenshot'
+    SOURCE = 'source'
+
+class File(Base):
+    __tablename__ = 'files'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    storage_name: Mapped[str] = mapped_column(String(256), unique=True)
+    original_name: Mapped[str] = mapped_column(String(256))
+    file_type: Mapped[Enum] = mapped_column(Enum(FileType))
+    game_id: Mapped[int] = mapped_column(ForeignKey(Game.id, ondelete='CASCADE'))

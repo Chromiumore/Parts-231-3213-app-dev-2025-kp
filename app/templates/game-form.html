@@ -10,7 +10,7 @@
         </h1>
         
         <div class="upload-section">
-            <form id="gameUploadForm" method="post">
+            <form id="gameUploadForm" method="post" enctype="multipart/form-data">
                 <!-- Название игры -->
                 <div class="mb-4">
                     <label for="name" class="form-label required">Название игры</label>
@@ -67,7 +67,7 @@
                     <div class="file-upload-box" onclick="document.getElementById('screenshots').click()">
                         <i class="fas fa-images fa-3x mb-3 text-muted"></i>
                         <p class="mb-1">Перетащите сюда файлы или нажмите для выбора</p>
-                        <input type="file" id="screenshots" name="screenshots" accept="image/*" multiple style="display: none;">
+                        <input type="file" id="screenshots" name="screenshots" accept="image/*" style="display: none;" multiple required>
                     </div>
                     <div id="screenshotsPreview" class="mt-2"></div>
                 </div>

@@ -1,11 +1,14 @@
+import os
 import json
 from functools import wraps
 from datetime import datetime
-from flask import Blueprint, render_template, make_response, request, flash, redirect, url_for, abort
+from uuid import uuid4
+from flask import Blueprint, render_template, make_response, request, flash, redirect, url_for, abort, current_app
 from flask_login import login_required, current_user
 from .repositories.game_repository import GameRepository, Game
 from .repositories.user_repository import UserRepository
 from .repositories.os_repository import OSRepository
+from .repositories.file_repository import FileRepository, File, FileType
 from .models import db
 
 bp = Blueprint('games', __name__)
@@ -13,6 +16,13 @@ bp = Blueprint('games', __name__)
 game_repository = GameRepository(db)
 user_repository = UserRepository(db)
 os_repository = OSRepository(db)
+file_repository = FileRepository(db)
+
+
+def gen_storage_filename(filename):
+    prefix = str(uuid4())
+    return f"{prefix}-{filename}"
+
 
 def permission_required(func):
     @wraps(func)
@@ -44,6 +54,11 @@ def creator_hub():
 def upload():
     if request.method == 'POST':
         form = request.form
+
+        main_image = request.files.get('main-image')
+        screenshots = request.files.getlist('screenshots')
+        source_file = request.files.get('game-files')
+        
         os_ids = form.getlist('os-list')
         new_game = Game(
             name = form.get('name'),
@@ -54,25 +69,54 @@ def upload():
 
         os_list = list(map(os_repository.get_by_id, os_ids))
 
-        is_successful = game_repository.create(new_game, os_list)
+        created_game = game_repository.create(new_game, os_list)
+        
+        m_img_storage_name = gen_storage_filename(main_image.filename)
+        file_repository.create(File(
+                storage_name = m_img_storage_name,
+                original_name = main_image.filename,
+                file_type = FileType.MAIN_IMAGE,
+                game_id = new_game.id
+            ))
+        main_image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], m_img_storage_name))
+        
+        for s in screenshots:
+            s_storage_name = gen_storage_filename(s.filename)
+            file_repository.create(File(
+                storage_name = s_storage_name,
+                original_name = s.filename,
+                file_type = FileType.SCREENSHOT,
+                game_id = new_game.id
+            ))
+            s.save(os.path.join(current_app.config['UPLOAD_FOLDER'], s_storage_name))
 
-        if is_successful:
+        src_storage_name = gen_storage_filename(source_file.filename)
+        file_repository.create(File(
+                storage_name = src_storage_name,
+                original_name = source_file.filename,
+                file_type = FileType.SOURCE,
+                game_id = new_game.id
+            ))
+        source_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], src_storage_name))
+
+        if created_game:
             flash('Игра успешно загружена', 'success')
             return redirect(url_for('games.creator_hub'))
         else:
             flash('Не удалось загрузить игру. Попробуйте позже', 'success')
     
-    os = os_repository.get_all_and_game_has_by_id()
-    return render_template('upload.html', os=os)
+    game_os = os_repository.get_all_and_game_has_by_id()
+    return render_template('upload.html', os=game_os)
 
 @bp.route('/creatorhub/update/<game_id>', methods=['POST', 'GET'])
 @login_required
 @permission_required
 def update(game_id):
-    game = game_repository.get_game_by_id(game_id)
-    if not game:
-        return abort(404)
+    game = game_repository.get_game_by_id(game_id) 
     if request.method == 'POST':
+        main_image = request.files.get('main-image')
+        screenshots = request.files.getlist('screenshots')
+        source_file = request.files.get('game-files')
         if game:
             updated_game = Game(
                 id=game_id,
@@ -89,6 +133,7 @@ def update(game_id):
                 return redirect(url_for('games.creator_hub'))
             else:
                 flash('Не удалось загрузить игру. Попробуйте позже', 'success')
+        return abort(404)
 
     os_info = os_repository.get_all_and_game_has_by_id(game_id)
     print(os_info)
@@ -99,7 +144,7 @@ def update(game_id):
 @permission_required
 def delete(game_id):
     is_successful = game_repository.delete(game_id)
-
+    
     if is_successful:
         flash('Игра успешно удалена', 'success')
     else:

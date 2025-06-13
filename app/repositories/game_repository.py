@@ -28,11 +28,11 @@ class GameRepository:
                 os.games.append(game)
                 self.db.session.flush()
             self.db.session.add(game)
-            self.db.session.commit()
+            self.db.session.flush()
         except Exception as e:
             self.db.session.rollback()
             raise e
-        return True
+        return game
     
     def update(self, id, game):
         try:
