@@ -62,3 +62,30 @@
     margin-bottom: 10px;
     border-radius: 4px;
 }
+
+.game-gallery img {
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-bottom: 10px;
+}
+
+.game-gallery img:hover {
+    transform: scale(1.02);
+}
+
+.main-image {
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.download-btn {
+    font-size: 1.2rem;
+    padding: 10px 25px;
+}
+
+.game-info-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+}

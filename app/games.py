@@ -42,6 +42,12 @@ def index():
     games = game_repository.all()
     return render_template('index.html', games = games)
 
+@bp.route('/<game_id>')
+def view_game(game_id):
+    game = game_repository.get_game_by_id(game_id)
+    supported_os = os_repository.get_game_supported_os(game_id)
+    return render_template('view-game.html', game=game, os=supported_os)
+
 @bp.route('/creatorhub')
 @login_required
 def creator_hub():
@@ -136,7 +142,6 @@ def update(game_id):
         return abort(404)
 
     os_info = os_repository.get_all_and_game_has_by_id(game_id)
-    print(os_info)
     return render_template('update.html', game=game, os=os_info) 
 
 @bp.route('/creatorhub/delete/<game_id>', methods=['GET'])

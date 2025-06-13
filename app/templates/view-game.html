@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <!-- Блок 1: Галерея и основная информация -->
+    <div class="row mb-5">
+        <!-- Галерея изображений -->
+        <div class="col-lg-6">
+            <div class="main-image">
+                <img src="https://placehold.co/800x450" class="img-fluid rounded" alt="Stardew Valley" id="mainImage">
+            </div>
+            <div class="row game-gallery">
+                <div class="col-4">
+                    <img src="https://placehold.co/300x170" class="img-fluid rounded" alt="Скриншот 1" onclick="document.getElementById('mainImage').src=this.src">
+                </div>
+                <div class="col-4">
+                    <img src="https://placehold.co/300x170/red/white" class="img-fluid rounded" alt="Скриншот 2" onclick="document.getElementById('mainImage').src=this.src">
+                </div>
+                <div class="col-4">
+                    <img src="https://placehold.co/300x170/green/white" class="img-fluid rounded" alt="Скриншот 3" onclick="document.getElementById('mainImage').src=this.src">
+                </div>
+            </div>
+        </div>
+
+        <!-- Информация об игре -->
+        <div class="col-lg-6">
+            <div class="game-info-card h-100">
+                <h1 class="mb-3">Stardew Lowland</h1>
+                <p class="text-muted fs-5 mb-4">by ConceptedApe</p>
+             
+                <p class="mb-4">Stardew Lowland - это фермерский симулятор с элементами RPG, где вы наследуете старую ферму своего деда. Выращивайте урожай, разводите животных, создавайте предметы, исследуйте пещеры и заводите друзей с жителями долины!</p>
+                
+                <div class="mb-4">
+                    <p><strong>Дата выхода:</strong> 26 февраля 2016</p>
+                    <p><strong>Последнее обновление:</strong> 18 ноября 2022</p>
+                </div>
+                
+                <button class="btn btn-success btn-lg w-100 mb-3">
+                    <i class="fas fa-download me-2"></i>Скачать
+                </button>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок 2: Подробное описание и загрузка -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">О игре</h2>
+                    
+                    <div class="mb-5">
+                        <p>Stardew Lowland - это фермерский симулятор с открытым миром, созданный Эриком Бароне (известным как ConceptedApe). Игра была вдохновлена серией Harvest Moon, но предлагает гораздо больше возможностей и свободы действий.</p>
+                        
+                        <h5 class="mt-4">Особенности:</h5>
+                        <ul>
+                            <li>Создайте свою ферму: выращивайте урожай, разводите животных, создавайте ремесленные изделия</li>
+                            <li>Исследуйте огромные пещеры, полные опасных существ и ценных сокровищ</li>
+                            <li>Взаимодействуйте с более чем 30 персонажами, заводите друзей и создавайте семью</li>
+                            <li>Присоединяйтесь к местному сообществу и участвуйте в сезонных фестивалях</li>
+                            <li>Переоборудуйте и улучшайте свой дом</li>
+                            <li>Создавайте свою собственную историю в долине Стардью</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div>
+                            <h5 class="mb-3">Доступно для:</h5>
+                            <div>
+                                <i class="fab fa-windows os-icon text-primary" title="Windows"></i>
+                                <i class="fab fa-apple os-icon text-secondary" title="macOS"></i>
+                                <i class="fab fa-linux os-icon text-success" title="Linux"></i>
+                                <i class="fab fa-playstation os-icon text-info" title="PlayStation"></i>
+                                <i class="fab fa-xbox os-icon text-success" title="Xbox"></i>
+                                <i class="fab fa-nintendo-switch os-icon text-danger" title="Nintendo Switch"></i>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary download-btn mt-3 mt-md-0">
+                            <i class="fas fa-download me-2"></i>Скачать игру
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+{% endblock %}
