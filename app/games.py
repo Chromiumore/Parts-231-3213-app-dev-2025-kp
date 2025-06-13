@@ -143,7 +143,12 @@ def update(game_id):
 @login_required
 @permission_required
 def delete(game_id):
+    game_files = file_repository.get_files_by_game_id(game_id)
+
     is_successful = game_repository.delete(game_id)
+
+    for file in game_files:
+        os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], file.storage_name))
     
     if is_successful:
         flash('Игра успешно удалена', 'success')
