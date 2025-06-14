@@ -20,7 +20,7 @@ class OSRepository:
 
     def get_game_supported_os(self, game_id):
         query = self.db.select(OS).join(OS.games).where(Game.id == game_id)
-        return self.db.session.execute(query).scalars()
+        return self.db.session.execute(query).all()
 
     def get_all_and_game_has_by_id(self, game_id=None):
         if game_id is not None:

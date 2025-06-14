@@ -8,7 +8,7 @@ from flask_login import login_required, current_user
 from .repositories.game_repository import GameRepository, Game
 from .repositories.user_repository import UserRepository
 from .repositories.os_repository import OSRepository
-from .repositories.file_repository import FileRepository, File, FileType
+from .repositories.file_repository import FileRepository, File
 from .models import db
 
 bp = Blueprint('games', __name__)
@@ -45,8 +45,12 @@ def index():
 @bp.route('/<game_id>')
 def view_game(game_id):
     game = game_repository.get_game_by_id(game_id)
+    if not game:
+        abort(404)
     supported_os = os_repository.get_game_supported_os(game_id)
-    return render_template('view-game.html', game=game, os=supported_os)
+    media = file_repository.get_media_by_game_id(game_id)
+    source = file_repository.get_source_by_game_id(game_id)
+    return render_template('view-game.html', game=game, os=supported_os, media=media, source=source)
 
 @bp.route('/creatorhub')
 @login_required
@@ -81,7 +85,7 @@ def upload():
         file_repository.create(File(
                 storage_name = m_img_storage_name,
                 original_name = main_image.filename,
-                file_type = FileType.MAIN_IMAGE,
+                file_type = 'main_image',
                 game_id = new_game.id
             ))
         main_image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], m_img_storage_name))
@@ -91,7 +95,7 @@ def upload():
             file_repository.create(File(
                 storage_name = s_storage_name,
                 original_name = s.filename,
-                file_type = FileType.SCREENSHOT,
+                file_type = 'screenshot',
                 game_id = new_game.id
             ))
             s.save(os.path.join(current_app.config['UPLOAD_FOLDER'], s_storage_name))
@@ -100,7 +104,7 @@ def upload():
         file_repository.create(File(
                 storage_name = src_storage_name,
                 original_name = source_file.filename,
-                file_type = FileType.SOURCE,
+                file_type = 'source',
                 game_id = new_game.id
             ))
         source_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], src_storage_name))

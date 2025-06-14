@@ -1,8 +1,8 @@
-"""file table
+"""enum file type
 
-Revision ID: 183d95ded5e8
+Revision ID: 194dee641040
 Revises: e3625d9643ce
-Create Date: 2025-06-13 02:24:51.722028
+Create Date: 2025-06-15 01:14:50.730697
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '183d95ded5e8'
+revision = '194dee641040'
 down_revision = 'e3625d9643ce'
 branch_labels = None
 depends_on = None
@@ -22,9 +22,9 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('storage_name', sa.String(length=256), nullable=False),
     sa.Column('original_name', sa.String(length=256), nullable=False),
-    sa.Column('file_type', sa.Enum('MAIN_IMAGE', 'SCREENSHOT', 'SOURCE', name='filetype'), nullable=False),
+    sa.Column('file_type', sa.Enum('main_image', 'screenshot', 'source'), nullable=False),
     sa.Column('game_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['game_id'], ['games.id'], name=op.f('fk_files_game_id_games')),
+    sa.ForeignKeyConstraint(['game_id'], ['games.id'], name=op.f('fk_files_game_id_games'), ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_files')),
     sa.UniqueConstraint('storage_name', name=op.f('uq_files_storage_name'))
     )
