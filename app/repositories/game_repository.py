@@ -7,7 +7,7 @@ class GameRepository:
         self.db : SQLAlchemy = db
 
     def all(self):
-        query = self.db.select(Game).join(User, Game.user_id == User.id)
+        query = self.db.select(Game).join(User, Game.user_id == User.id).order_by(Game.last_updated_at.desc())
         return self.db.session.execute(query).scalars()
     
     def get_game_by_id(self, id):

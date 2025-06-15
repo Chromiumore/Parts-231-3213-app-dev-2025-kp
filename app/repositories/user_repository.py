@@ -1,6 +1,7 @@
 from app.models import Game, User
 from flask_sqlalchemy import SQLAlchemy
 from hashlib import sha256
+from sqlalchemy import and_
 
 class UserRepository:
     def __init__(self, db):
@@ -31,3 +32,7 @@ class UserRepository:
     def get_user_by_username_and_password(self, username, password):
         query = self.db.select(User).where(username == User.username, sha256(password.encode()).hexdigest() == User.password_hash)
         return self.db.session.execute(query).scalar()
+    
+    def get_author(self, game_id):
+        query = self.db.select(User).where(and_(User.id == Game.user_id, Game.id == game_id))
+        self.db.session.execute(query).scalar()

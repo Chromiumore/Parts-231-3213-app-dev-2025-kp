@@ -41,9 +41,14 @@ def permission_required(func):
 @bp.route('/')
 def index():
     games = game_repository.all()
-    return render_template('index.html', games = games)
+    games_info = []
+    for game in games:
+        print(os_repository.get_game_supported_os(game.id))
+        games_info.append([game, user_repository.get_author(game.id), os_repository.get_game_supported_os(game.id),
+                           file_repository.get_main_image_by_game_id(game.id)])
+    return render_template('index.html', games_info = games_info)
 
-@bp.route('/<game_id>')
+@bp.route('/<int:game_id>')
 def view_game(game_id):
     game, author = list(game_repository.get_game_and_user_by_id(game_id))
     if not game:

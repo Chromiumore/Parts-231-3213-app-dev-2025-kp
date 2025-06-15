@@ -19,6 +19,10 @@ class FileRepository:
                                                                             db.case((File.file_type == 'main_image', 1), else_=2))
         return self.db.session.execute(query).scalars()
     
+    def get_main_image_by_game_id(self, game_id):
+        query = self.db.select(File).where(and_(File.game_id == game_id, File.file_type == 'main_image'))
+        return self.db.session.execute(query).scalar()
+    
     def get_source_by_game_id(self, game_id):
         query = self.db.select(File).where(and_(File.game_id == game_id, File.file_type == 'source'))
         return self.db.session.execute(query).scalar()
