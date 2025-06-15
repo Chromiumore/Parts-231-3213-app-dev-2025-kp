@@ -19,8 +19,8 @@ class GameRepository:
         return self.db.session.execute(query).scalars()
 
     def get_game_and_user_by_id(self, id):
-        query = self.db.select(Game, OS, User).join(OS.games).join(User, User.id == Game.user_id).where(Game.id == id)
-        return self.db.session.execute(query).all()
+        query = self.db.select(Game, User).join(User, User.id == Game.user_id).where(Game.id == id)
+        return self.db.session.execute(query).one()
     
     def create(self, game, os_list):
         try:

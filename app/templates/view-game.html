@@ -7,32 +7,34 @@
         <!-- Галерея изображений -->
         <div class="col-lg-6">
             <div class="main-image">
-                <img src="https://placehold.co/800x450" class="img-fluid rounded" alt="Stardew Valley" id="mainImage">
+                <img src="{{ url_for('games.send_uploaded_file', filename=media[0].storage_name) }}" class="img-fluid rounded"
+                alt="View image" id="mainImage" style="width: 800px; height: 450px;">
             </div>
             <div class="row game-gallery">
                 <div class="col-4">
-                    <img src="https://placehold.co/300x170" class="img-fluid rounded" alt="Скриншот 1" onclick="document.getElementById('mainImage').src=this.src">
+                    <img src="{{ url_for('games.send_uploaded_file', filename=media[0].storage_name) }}" class="img-fluid rounded"
+                    alt="{{ media[0].original_name }}" onclick="document.getElementById('mainImage').src=this.src" style="width: 300px; height: 170px;">
                 </div>
+                {% for i in range(1, media|length) %}
                 <div class="col-4">
-                    <img src="https://placehold.co/300x170/red/white" class="img-fluid rounded" alt="Скриншот 2" onclick="document.getElementById('mainImage').src=this.src">
+                    <img src="{{ url_for('games.send_uploaded_file', filename=media[i].storage_name) }}" class="img-fluid rounded" alt="Скриншот {{ i }}"
+                    onclick="document.getElementById('mainImage').src=this.src" style="width: 300px; height: 170px;">
                 </div>
-                <div class="col-4">
-                    <img src="https://placehold.co/300x170/green/white" class="img-fluid rounded" alt="Скриншот 3" onclick="document.getElementById('mainImage').src=this.src">
-                </div>
+                {% endfor %}
             </div>
         </div>
 
         <!-- Информация об игре -->
         <div class="col-lg-6">
             <div class="game-info-card h-100">
-                <h1 class="mb-3">Stardew Lowland</h1>
-                <p class="text-muted fs-5 mb-4">by ConceptedApe</p>
+                <h1 class="mb-3">{{ game.name }}</h1>
+                <p class="text-muted fs-5 mb-4">by {{ author.username }}</p>
              
-                <p class="mb-4">Stardew Lowland - это фермерский симулятор с элементами RPG, где вы наследуете старую ферму своего деда. Выращивайте урожай, разводите животных, создавайте предметы, исследуйте пещеры и заводите друзей с жителями долины!</p>
+                <p class="mb-4">{{ game.description }}</p>
                 
                 <div class="mb-4">
-                    <p><strong>Дата выхода:</strong> 26 февраля 2016</p>
-                    <p><strong>Последнее обновление:</strong> 18 ноября 2022</p>
+                    <p><strong>Дата выхода:</strong> {{ game.created_at }}</p>
+                    <p><strong>Последнее обновление:</strong> {{ game.last_updated_at }}</p>
                 </div>
                 
                 <button class="btn btn-success btn-lg w-100 mb-3">
@@ -48,38 +50,11 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title mb-4">О игре</h2>
-                    
-                    <div class="mb-5">
-                        <p>Stardew Lowland - это фермерский симулятор с открытым миром, созданный Эриком Бароне (известным как ConceptedApe). Игра была вдохновлена серией Harvest Moon, но предлагает гораздо больше возможностей и свободы действий.</p>
-                        
-                        <h5 class="mt-4">Особенности:</h5>
-                        <ul>
-                            <li>Создайте свою ферму: выращивайте урожай, разводите животных, создавайте ремесленные изделия</li>
-                            <li>Исследуйте огромные пещеры, полные опасных существ и ценных сокровищ</li>
-                            <li>Взаимодействуйте с более чем 30 персонажами, заводите друзей и создавайте семью</li>
-                            <li>Присоединяйтесь к местному сообществу и участвуйте в сезонных фестивалях</li>
-                            <li>Переоборудуйте и улучшайте свой дом</li>
-                            <li>Создавайте свою собственную историю в долине Стардью</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="d-flex justify-content-between align-items-center flex-wrap">
-                        <div>
-                            <h5 class="mb-3">Доступно для:</h5>
-                            <div>
-                                <i class="fab fa-windows os-icon text-primary" title="Windows"></i>
-                                <i class="fab fa-apple os-icon text-secondary" title="macOS"></i>
-                                <i class="fab fa-linux os-icon text-success" title="Linux"></i>
-                                <i class="fab fa-playstation os-icon text-info" title="PlayStation"></i>
-                                <i class="fab fa-xbox os-icon text-success" title="Xbox"></i>
-                                <i class="fab fa-nintendo-switch os-icon text-danger" title="Nintendo Switch"></i>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary download-btn mt-3 mt-md-0">
-                            <i class="fas fa-download me-2"></i>Скачать игру
-                        </button>
-                    </div>
+                    <h2 class="card-title mb-4">Об игре</h2>
+                    {{ info_markdown |safe}}
+                    <button class="btn btn-primary download-btn mt-3 mt-md-0">
+                        <i class="fas fa-download me-2"></i>Скачать игру
+                    </button>
                 </div>
             </div>
         </div>

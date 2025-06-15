@@ -15,7 +15,7 @@ class FileRepository:
         return self.db.session.execute(query).scalar()
     
     def get_media_by_game_id(self, game_id):
-        query = self.db.select(File).where(and_(File.game_id == game_id, File.file_type in ('main_image', 'screenshot'))).order_by(
+        query = self.db.select(File).where(and_(File.game_id == game_id, File.file_type.in_(['main_image', 'screenshot']))).order_by(
                                                                             db.case((File.file_type == 'main_image', 1), else_=2))
         return self.db.session.execute(query).scalars()
     

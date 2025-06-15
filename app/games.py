@@ -3,8 +3,9 @@ import json
 from functools import wraps
 from datetime import datetime
 from uuid import uuid4
-from flask import Blueprint, render_template, make_response, request, flash, redirect, url_for, abort, current_app
+from flask import Blueprint, render_template, make_response, request, flash, redirect, url_for, abort, current_app, send_from_directory
 from flask_login import login_required, current_user
+from markdown import markdown
 from .repositories.game_repository import GameRepository, Game
 from .repositories.user_repository import UserRepository
 from .repositories.os_repository import OSRepository
@@ -44,13 +45,14 @@ def index():
 
 @bp.route('/<game_id>')
 def view_game(game_id):
-    game = game_repository.get_game_by_id(game_id)
+    game, author = list(game_repository.get_game_and_user_by_id(game_id))
     if not game:
         abort(404)
     supported_os = os_repository.get_game_supported_os(game_id)
     media = file_repository.get_media_by_game_id(game_id)
     source = file_repository.get_source_by_game_id(game_id)
-    return render_template('view-game.html', game=game, os=supported_os, media=media, source=source)
+    return render_template('view-game.html', game=game, author=author, path=current_app.config['UPLOAD_FOLDER'],
+                            supported_os=supported_os, media=list(media), source=source, info_markdown=markdown(game.info))
 
 @bp.route('/creatorhub')
 @login_required
@@ -165,3 +167,7 @@ def delete(game_id):
         flash('Не удалось удалить игру', 'error')
             
     return redirect(url_for('games.creator_hub'))
+
+@bp.route('/uploads/<filename>')
+def send_uploaded_file(filename=''):
+    return send_from_directory(current_app.config["UPLOAD_FOLDER"], filename)
