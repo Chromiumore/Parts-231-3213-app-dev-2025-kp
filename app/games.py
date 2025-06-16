@@ -213,4 +213,5 @@ def delete(game_id):
 
 @bp.route('/uploads/<filename>')
 def send_uploaded_file(filename=''):
-    return send_from_directory(current_app.config["UPLOAD_FOLDER"], filename)
+    file = file_repository.get_file_by_storage_name(filename)
+    return send_from_directory(current_app.config["UPLOAD_FOLDER"], filename, download_name=file.original_name)

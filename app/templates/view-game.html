@@ -37,9 +37,9 @@
                     <p><strong>Последнее обновление:</strong> {{ game.last_updated_at }}</p>
                 </div>
                 
-                <button class="btn btn-success btn-lg w-100 mb-3">
+                <a href="#downloadGameButton" class="btn btn-success btn-lg w-100 mb-3">
                     <i class="fas fa-download me-2"></i>Скачать
-                </button>
+                </a>
                 
             </div>
         </div>
@@ -65,9 +65,9 @@
                 {% endfor %}
             </div>
         </div>
-        <button class="btn btn-primary download-btn mt-3 mt-md-0">
+        <a href="{{ url_for('games.send_uploaded_file', filename=source.storage_name) }}" class="btn btn-primary download-btn mt-3 mt-md-0" id="downloadGameButton">
             <i class="fas fa-download me-2"></i>Скачать игру
-        </button>
+        </a>
     </div>
 </div>
 
