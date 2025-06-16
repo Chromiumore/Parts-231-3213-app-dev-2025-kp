@@ -146,16 +146,52 @@ def update(game_id):
                 last_updated_at=datetime.now()
             )
 
-            is_successful = game_repository.update(game_id, updated_game)
-            if is_successful:
+            created_game = game_repository.update(game_id, updated_game)
+            
+            old_game_files = file_repository.get_files_by_game_id(game_id)
+
+            file_repository.remove_files()
+            for file in old_game_files:
+                os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'], file.storage_name))
+
+            m_img_storage_name = gen_storage_filename(main_image.filename)
+            file_repository.create(File(
+                    storage_name = m_img_storage_name,
+                    original_name = main_image.filename,
+                    file_type = 'main_image',
+                    game_id = updated_game.id
+                ))
+            main_image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], m_img_storage_name))
+        
+            for s in screenshots:
+                s_storage_name = gen_storage_filename(s.filename)
+                file_repository.create(File(
+                    storage_name = s_storage_name,
+                    original_name = s.filename,
+                    file_type = 'screenshot',
+                    game_id = updated_game.id
+                ))
+                s.save(os.path.join(current_app.config['UPLOAD_FOLDER'], s_storage_name))
+
+            src_storage_name = gen_storage_filename(source_file.filename)
+            file_repository.create(File(
+                    storage_name = src_storage_name,
+                    original_name = source_file.filename,
+                    file_type = 'source',
+                    game_id = updated_game.id
+                ))
+            source_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], src_storage_name))
+
+            if created_game:
                 flash('Игра успешно загружена', 'success')
                 return redirect(url_for('games.creator_hub'))
             else:
                 flash('Не удалось загрузить игру. Попробуйте позже', 'success')
-        return abort(404)
 
-    os_info = os_repository.get_all_and_game_has_by_id(game_id)
-    return render_template('update.html', game=game, os=os_info) 
+    if game:
+        os_info = os_repository.get_all_and_game_has_by_id(game_id)
+        return render_template('update.html', game=game, os=os_info)
+    abort(404)
 
 @bp.route('/creatorhub/delete/<game_id>', methods=['GET'])
 @login_required

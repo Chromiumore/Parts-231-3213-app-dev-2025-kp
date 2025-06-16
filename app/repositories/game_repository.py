@@ -47,7 +47,7 @@ class GameRepository:
         except Exception as e:
             self.db.session.rollback()
             raise e
-        return True
+        return game
 
     def delete(self, id):
         try:

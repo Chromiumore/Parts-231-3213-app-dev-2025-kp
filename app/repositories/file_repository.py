@@ -1,4 +1,4 @@
-from app.models import db, File
+from app.models import db, File, Game
 from flask import current_app
 from sqlalchemy import and_
 
@@ -34,6 +34,15 @@ class FileRepository:
     def create(self, file):
         try:
             self.db.session.add(file)
+            self.db.session.commit()
+        except Exception as e:
+            self.db.session.rollback()
+            raise e
+        return True
+    
+    def remove_files(self):
+        try:
+            self.db.session.query(File).where(File.game_id == Game.id).delete()
             self.db.session.commit()
         except Exception as e:
             self.db.session.rollback()
