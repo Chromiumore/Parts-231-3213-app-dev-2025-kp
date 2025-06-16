@@ -3,6 +3,9 @@
 {% block content %}
 <h2 class="mb-4">Popular Games</h2>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% if not games_info %}
+    <p class="fs-2">Не удалось ничего найти</p>
+    {% else %}
     {% for el in games_info %}
     <div class="col">
         <div class="card h-100 game-card">
@@ -25,5 +28,6 @@
         </div>
     </div>
     {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}
