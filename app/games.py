@@ -61,9 +61,12 @@ def view_game(game_id):
 @bp.route('/creatorhub')
 @login_required
 def creator_hub():
+    games_info = []
     games = game_repository.get_games_by_user_id(current_user.id)
+    for game in games:
+        games_info.append([game, file_repository.get_main_image_by_game_id(game.id), os_repository.get_game_supported_os(game.id)])
     user = user_repository.get_user_by_id(current_user.id)
-    return render_template('creator-hub.html', games=games, user=user)
+    return render_template('creator-hub.html', games_info=games_info, user=user)
 
 @bp.route('/creatorhub/upload', methods=['POST', 'GET'])
 @login_required

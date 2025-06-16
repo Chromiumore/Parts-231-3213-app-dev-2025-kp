@@ -21,36 +21,35 @@
 
 <div class="mb-4">
     <h2 class="my-4">Мои игры</h2>
-    {% if not games %}
+    {% if not games_info %}
         <p>Вы пока не загрузили ни одной игры</p>
     {% else %}
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         
-        {% for game in games %}
+        {% for g in games_info %}
     <!-- Game card -->
         <div class="col">
             <div class="card h-100 game-card">
-                <img src="https://placehold.co/400x225" class="card-img-top" alt="Название игры">
+                <img src="{{ url_for('games.send_uploaded_file', filename=g[1].storage_name) }}" class="card-img-top" alt="g[0].name"
+                style="width: 400px; height: 250px;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
-                        <h5 class="card-title">{{ game.name }}</h5>
+                        <h5 class="card-title">{{ g[0].name }}</h5>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="game2Dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="game2Dropdown">
-                                <li><a class="dropdown-item" href="{{ url_for('games.update', game_id=game.id) }}"><i class="fas fa-edit me-2"></i>Редактировать</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="game2Dropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('games.update', game_id=g[0].id) }}"><i class="fas fa-edit me-2"></i>Редактировать</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="{{ url_for('games.delete', game_id=game.id) }}"><i class="fas fa-trash me-2"></i>Удалить</a></li>
+                                <li><a class="dropdown-item text-danger" href="{{ url_for('games.delete', game_id=g[0].id) }}"><i class="fas fa-trash me-2"></i>Удалить</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="h5">$19.99</span>
-                        <div>
-                            <i class="fab fa-windows os-icon text-primary" title="Windows"></i>
-                            <i class="fab fa-apple os-icon text-secondary" title="macOS"></i>
-                        </div>
+                    <div>
+                        {% for o in g[2] %}
+                        <i class="fab fa-{{ o.fa_icon_name }} os-icon" title="{{ o.display_name }}"></i>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
