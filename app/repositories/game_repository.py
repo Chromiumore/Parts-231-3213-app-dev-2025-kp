@@ -20,7 +20,7 @@ class GameRepository:
 
     def get_game_and_user_by_id(self, id):
         query = self.db.select(Game, User).join(User, User.id == Game.user_id).where(Game.id == id)
-        return self.db.session.execute(query).one()
+        return self.db.session.execute(query).one_or_none()
     
     def create(self, game, os_list):
         try:

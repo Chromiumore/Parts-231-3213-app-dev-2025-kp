@@ -71,3 +71,11 @@ class File(Base):
     original_name: Mapped[str] = mapped_column(String(256))
     file_type: Mapped[str] = mapped_column(Enum('main_image', 'screenshot', 'source'))
     game_id: Mapped[int] = mapped_column(ForeignKey(Game.id, ondelete='CASCADE'))
+
+class VisitLog(Base):
+    __tablename__ = 'visit_logs'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    path: Mapped[str] = mapped_column(String(100))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now)

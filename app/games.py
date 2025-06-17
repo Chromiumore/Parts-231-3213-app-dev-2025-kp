@@ -10,6 +10,7 @@ from .repositories.game_repository import GameRepository, Game
 from .repositories.user_repository import UserRepository
 from .repositories.os_repository import OSRepository
 from .repositories.file_repository import FileRepository, File
+from .repositories.visit_repository import VisitRepository, VisitLog
 from .models import db
 
 bp = Blueprint('games', __name__)
@@ -18,6 +19,7 @@ game_repository = GameRepository(db)
 user_repository = UserRepository(db)
 os_repository = OSRepository(db)
 file_repository = FileRepository(db)
+visit_repository = VisitRepository(db)
 
 
 def gen_storage_filename(filename):
@@ -37,6 +39,16 @@ def permission_required(func):
             return redirect(url_for('games.index'))
     return inner
 
+@bp.after_request
+def save_visit_log(response):
+    if request.method == 'GET' and response.status_code not in (404, 500):
+        log = VisitLog(
+            path = request.path,
+            user_id = current_user.id if current_user.is_authenticated else None
+        )
+        visit_repository.create(log)
+    return response
+        
 
 @bp.route('/')
 def index():
@@ -49,9 +61,11 @@ def index():
 
 @bp.route('/<int:game_id>')
 def view_game(game_id):
-    game, author = list(game_repository.get_game_and_user_by_id(game_id))
-    if not game:
+    game_info = game_repository.get_game_and_user_by_id(game_id)
+    if not game_info:
         abort(404)
+    
+    game, author = list(game_info)
     supported_os = os_repository.get_game_supported_os(game_id)
     media = file_repository.get_media_by_game_id(game_id)
     source = file_repository.get_source_by_game_id(game_id)
@@ -214,4 +228,6 @@ def delete(game_id):
 @bp.route('/uploads/<filename>')
 def send_uploaded_file(filename=''):
     file = file_repository.get_file_by_storage_name(filename)
+    if not file:
+        abort(404)
     return send_from_directory(current_app.config["UPLOAD_FOLDER"], filename, download_name=file.original_name)

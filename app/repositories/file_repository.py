@@ -8,11 +8,11 @@ class FileRepository:
     
     def get_file_by_id(self, id):
         query = self.db.select(File).filter_by(id=id)
-        return self.db.session.execute(query).scalar()
+        return self.db.session.execute(query).scalar_one_or_none()
     
     def get_file_by_storage_name(self, name):
         query = self.db.select(File).filter_by(storage_name=name)
-        return self.db.session.execute(query).scalar()
+        return self.db.session.execute(query).scalar_one_or_none()
     
     def get_media_by_game_id(self, game_id):
         query = self.db.select(File).where(and_(File.game_id == game_id, File.file_type.in_(['main_image', 'screenshot']))).order_by(
@@ -21,11 +21,11 @@ class FileRepository:
     
     def get_main_image_by_game_id(self, game_id):
         query = self.db.select(File).where(and_(File.game_id == game_id, File.file_type == 'main_image'))
-        return self.db.session.execute(query).scalar()
+        return self.db.session.execute(query).scalar_one_or_none()
     
     def get_source_by_game_id(self, game_id):
         query = self.db.select(File).where(and_(File.game_id == game_id, File.file_type == 'source'))
-        return self.db.session.execute(query).scalar()
+        return self.db.session.execute(query).scalar_one_or_none()
     
     def get_files_by_game_id(self, game_id):
         query = self.db.select(File).where(File.game_id == game_id)
