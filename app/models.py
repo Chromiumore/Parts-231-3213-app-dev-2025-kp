@@ -1,10 +1,8 @@
 from datetime import datetime
 from typing import Optional, List
-
-from flask import url_for
 from flask_login import UserMixin
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import MetaData, String, ForeignKey, Text, Table, Column, Enum, Sequence
+from sqlalchemy import MetaData, String, ForeignKey, Text, Table, Column, Enum
 from flask_sqlalchemy import SQLAlchemy
 
 class Base(DeclarativeBase):

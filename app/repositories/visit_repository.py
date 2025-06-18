@@ -17,5 +17,5 @@ class VisitRepository:
         return log
     
     def get_number_of_path_visits(self, path):
-        query = self.db.select(func.count(VisitLog)).where(path == VisitLog.path)
+        query = self.db.select(func.count()).select_from(VisitLog).where(path == VisitLog.path)
         return self.db.session.execute(query).scalar()

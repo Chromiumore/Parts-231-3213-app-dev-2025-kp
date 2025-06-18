@@ -7,17 +7,17 @@
         <!-- Галерея изображений -->
         <div class="col-lg-6">
             <div class="main-image">
-                <img src="{{ url_for('games.send_uploaded_file', filename=media[0].storage_name) }}" class="img-fluid rounded"
+                <img src="{{ url_for('uploads.send_uploaded_file', filename=media[0].storage_name) }}" class="img-fluid rounded"
                 alt="View image" id="mainImage" style="width: 800px; height: 450px;">
             </div>
             <div class="row game-gallery">
                 <div class="col-4">
-                    <img src="{{ url_for('games.send_uploaded_file', filename=media[0].storage_name) }}" class="img-fluid rounded"
+                    <img src="{{ url_for('uploads.send_uploaded_file', filename=media[0].storage_name) }}" class="img-fluid rounded"
                     alt="{{ media[0].original_name }}" onclick="document.getElementById('mainImage').src=this.src" style="width: 300px; height: 170px;">
                 </div>
                 {% for i in range(1, media|length) %}
                 <div class="col-4">
-                    <img src="{{ url_for('games.send_uploaded_file', filename=media[i].storage_name) }}" class="img-fluid rounded" alt="Скриншот {{ i }}"
+                    <img src="{{ url_for('uploads.send_uploaded_file', filename=media[i].storage_name) }}" class="img-fluid rounded" alt="Скриншот {{ i }}"
                     onclick="document.getElementById('mainImage').src=this.src" style="width: 300px; height: 170px;">
                 </div>
                 {% endfor %}
@@ -40,7 +40,12 @@
                 <a href="#downloadGameButton" class="btn btn-success btn-lg w-100 mb-3">
                     <i class="fas fa-download me-2"></i>Скачать
                 </a>
-                
+                {% if current_user.id == author.id %}
+                <div class="d-flex justify-content-around">
+                    <p><strong>Скачиваний: </strong>{{ downloads }}</p>
+                    <p><strong>Просмотров: </strong>{{ views }}</p>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -65,7 +70,7 @@
                 {% endfor %}
             </div>
         </div>
-        <a href="{{ url_for('games.send_uploaded_file', filename=source.storage_name) }}" class="btn btn-primary download-btn mt-3 mt-md-0" id="downloadGameButton">
+        <a href="{{ url_for('uploads.send_uploaded_file', filename=source.storage_name) }}" class="btn btn-primary download-btn mt-3 mt-md-0" id="downloadGameButton">
             <i class="fas fa-download me-2"></i>Скачать игру
         </a>
     </div>

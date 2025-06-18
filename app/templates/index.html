@@ -9,8 +9,8 @@
     {% for el in games_info %}
     <div class="col">
         <div class="card h-100 game-card">
-            <img src="{{ url_for('games.send_uploaded_file', filename=el[3].storage_name) }}" class="card-img-top" alt="{{ el[0].name }}" style="width: 400px; height: 225px;">
-            <div class="card-body">
+            <img src="{{ url_for('uploads.send_uploaded_file', filename=el[3].storage_name) }}" class="card-img-top" alt="{{ el[0].name }}" style="width: 400px; height: 225px;">
+            <div class="card-body text-bg-light">
                 <h5 class="card-title">{{ el[0].name }}</h5>
                 <p class="card-text text-muted">by {{ el[1].username }}</p>
                 <div class="d-flex justify-content-between align-items-center">
