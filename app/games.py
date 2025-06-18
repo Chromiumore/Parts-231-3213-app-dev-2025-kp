@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, abort, current_app
+from flask import Blueprint, render_template, url_for, abort, current_app, redirect
 from markdown import markdown
 from .repositories.game_repository import GameRepository
 from .repositories.user_repository import UserRepository
@@ -7,14 +7,18 @@ from .repositories.file_repository import FileRepository
 from .repositories.visit_repository import VisitRepository
 from .models import db
 
-bp = Blueprint('games', __name__)
+bp = Blueprint('games', __name__, url_prefix='/games')
 
 game_repository = GameRepository(db)
 user_repository = UserRepository(db)
 os_repository = OSRepository(db)
 file_repository = FileRepository(db)
 visit_repository = VisitRepository(db)
-        
+
+
+# Route with absolute path is outside blueprint in __init__.py
+def default():
+    return redirect(url_for('games.index'))
 
 @bp.route('/')
 def index():

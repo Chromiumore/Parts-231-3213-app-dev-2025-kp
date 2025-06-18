@@ -36,6 +36,8 @@ def create_app():
     app.register_blueprint(auth.bp)
 
     app.register_blueprint(games.bp)
+    app.route('/')(games.default)
+
     app.register_blueprint(uploads.bp)
     app.register_blueprint(creator_hub.bp)
 
