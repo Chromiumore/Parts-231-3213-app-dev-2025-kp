@@ -22,14 +22,14 @@
                 <div class="mb-4">
                     <label for="description" class="form-label required">Краткое описание</label>
                     <textarea class="form-control" name="description" id="description" rows="3"
-                    placeholder="Кратко опишите вашу игру">{{ game.description or '' }}</textarea>
+                    placeholder="Кратко опишите вашу игру">{{ game.description or '' }} required</textarea>
                 </div>
                 
                 <!-- Полное описание -->
                 <div class="mb-4">
                     <label for="info" class="form-label required">Полное описание</label>
                     <textarea class="form-control" name="info" id="info" rows="6"
-                    placeholder="Подробно опишите вашу игру, её особенности, геймплей и т.д.">{{ game.info or '' }}</textarea>
+                    placeholder="Подробно опишите вашу игру, её особенности, геймплей и т.д." required>{{ game.info or '' }}</textarea>
                     <div class="form-text">Используйте Markdown для форматирования текста</div>
                 </div>
                 

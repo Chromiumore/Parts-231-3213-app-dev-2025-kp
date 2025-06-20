@@ -24,7 +24,11 @@
                     <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 ms-4">
                         <li><a href="{{ url_for('games.index') }}" class="nav-link px-2 text-white">Explore</a></li>
                         <li><a href="{{ url_for('creator_hub.creator_hub') }}" class="nav-link px-2 text-white">Creator Hub</a></li>
+                        {% if current_user.is_authenticated %}
+                        {% if current_user.get_role_name() == 'moderator' %}
                         <li><a href="{{ url_for('moderation.stats') }}" class="nav-link px-2 text-white">Moderation</a></li>
+                        {% endif %}
+                        {% endif %}
                     </ul>
                 </div>
 
