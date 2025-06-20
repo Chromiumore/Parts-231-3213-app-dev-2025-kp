@@ -20,6 +20,15 @@ class UserRepository:
             self.db.session.rollback()
             raise e
         return self.get_user_by_username_and_password(username, password)
+    
+    def delete(self, id):
+        try:
+            self.db.session.query(User).where(User.id == id).delete()
+            self.db.session.commit()
+        except Exception as e:
+            self.db.session.rollback()
+            raise e
+        return True
 
     def all(self):
         query = self.db.select(User)

@@ -163,7 +163,7 @@ def update(game_id):
         return render_template('update.html', game=game, os=os_info)
     abort(404)
 
-@bp.route('/delete/<game_id>', methods=['GET'])
+@bp.route('/delete/<game_id>', methods=['POST'])
 @login_required
 @permission_required()
 def delete(game_id):

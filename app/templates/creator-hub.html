@@ -44,8 +44,9 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ url_for('creator_hub.update', game_id=g[0].id) }}"><i class="fas fa-edit me-2"></i>Редактировать</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="{{ url_for('creator_hub.delete', game_id=g[0].id) }}"><i class="fas fa-trash me-2"></i>Удалить</a></li>
-                            </ul>
+                                <li><button class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    data-game-id="{{ g[0].id }}"><i class="fas fa-trash me-2"></i>Удалить</button></li>
+                                </ul>
                         </div>
                     </div>
                     <div style="z-index: 2;">
@@ -65,4 +66,28 @@
     {% endif %}
 </div>
 
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Удаление игры</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Вы уверены, что хотите удалить игру?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                <form method="post" id="deleteModalForm">
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='game_delete_modal.js') }}"></script>
 {% endblock %}

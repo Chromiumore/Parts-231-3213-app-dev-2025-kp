@@ -50,7 +50,7 @@ class Game(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'))
     description: Mapped[Optional[str]] = mapped_column(String(150))
     info: Mapped[Optional[str]] = mapped_column(Text())
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
@@ -80,7 +80,7 @@ class VisitLog(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     path: Mapped[str] = mapped_column(String(100))
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='SET NULL'), nullable=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
 
 class GameStats(Base):

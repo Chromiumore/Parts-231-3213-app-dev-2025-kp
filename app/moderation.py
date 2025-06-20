@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for
+from flask import Blueprint, render_template, url_for, redirect, flash
 from flask_login import login_required
 from .models import db
 from .repositories.visit_repository import VisitRepository
@@ -39,3 +39,11 @@ def stats():
                            total_users=total_users, total_developers=total_developers, downloaded_names=downloaded_names,
                            downloaded_numbers=downloaded_numbers, visited_names=visited_names, visited_numbers=visited_numbers,
                            os_names=os_names, os_percents=os_percents)
+
+@bp.route('/ban/<user_id>', methods=['POST'])
+@login_required
+@permission_required(only_moderator=True)
+def ban(user_id):
+    user_repository.delete(user_id)
+    flash('Пользователь успешно заблокирован', 'success')
+    return redirect(url_for('games.index'))
