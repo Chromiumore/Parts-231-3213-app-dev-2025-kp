@@ -34,11 +34,11 @@ class StatsRepository:
     
     def get_total_downloads(self):
         query = self.db.select(func.sum(GameStats.downloads)).select_from(GameStats)
-        return self.db.session.execute(query).scalar()
+        return int(self.db.session.execute(query).scalar() or 0)
     
     def get_total_visits(self):
         query = self.db.select(func.sum(GameStats.visits)).select_from(GameStats)
-        return self.db.session.execute(query).scalar()
+        return int(self.db.session.execute(query).scalar() or 0)
     
     def inc_visits(self, game_id):
         try:

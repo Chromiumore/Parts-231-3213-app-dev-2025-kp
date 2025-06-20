@@ -30,7 +30,7 @@ def stats():
     os_stats = stats_repository.get_os_stats()
     os_names = [el[0].display_name for el in os_stats]
     os_numbers = [el[1] for el in os_stats]
-    os_percents = [round((el*100)/sum(os_numbers)) for el in os_numbers]
+    os_percents = [0 if sum(os_numbers) == 0 else round((el*100)/sum(os_numbers)) for el in os_numbers]
 
     return render_template('global-stats.html', total_games=total_games, total_downloads=total_downloads,
                            total_users=total_users, total_developers=total_developers, downloaded_names=downloaded_names,
