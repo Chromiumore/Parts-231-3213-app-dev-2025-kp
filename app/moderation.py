@@ -5,6 +5,7 @@ from .repositories.visit_repository import VisitRepository
 from .repositories.game_repository import GameRepository
 from .repositories.user_repository import UserRepository
 from .repositories.stats_repository import StatsRepository
+from .tools import permission_required
 
 bp = Blueprint('moderation', __name__, url_prefix='/moderation')
 
@@ -13,6 +14,8 @@ stats_repository = StatsRepository(db)
 user_repository = UserRepository(db)
 
 @bp.route('/stats')
+@login_required
+@permission_required(only_moderator=True)
 def stats():
     total_games = game_repository.get_number_of_games()
     total_downloads = stats_repository.get_total_downloads()

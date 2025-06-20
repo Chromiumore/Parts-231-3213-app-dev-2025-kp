@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional, List
 from flask_login import UserMixin
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.ext.hybrid import hybrid_method
 from sqlalchemy import MetaData, String, ForeignKey, Text, Table, Column, Enum, Integer
 from flask_sqlalchemy import SQLAlchemy
 
@@ -24,6 +25,10 @@ class User(Base, UserMixin):
     password_hash: Mapped[str] = mapped_column(String(256))
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
     role_id: Mapped[int] = mapped_column(ForeignKey('roles.id'))
+
+    @hybrid_method
+    def get_role_name(self):
+        return db.session.query(Role.name).join(User).where(User.id == self.id).scalar()
 
 class Role(Base):
     __tablename__ = 'roles'

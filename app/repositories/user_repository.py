@@ -1,4 +1,4 @@
-from app.models import Game, User
+from app.models import Game, User, Role
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from hashlib import sha256
@@ -43,4 +43,8 @@ class UserRepository:
     
     def get_number_of_developers(self):
         query = self.db.select(func.count(User.id.distinct())).select_from(User).join(Game, Game.user_id == User.id)
+        return self.db.session.execute(query).scalar()
+    
+    def get_user_role(self, user_id):
+        query = self.db.select(Role).join(User, User.role_id == Role.id).where(User.id == user_id)
         return self.db.session.execute(query).scalar()

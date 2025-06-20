@@ -99,7 +99,7 @@ def upload():
 
 @bp.route('/update/<game_id>', methods=['POST', 'GET'])
 @login_required
-@permission_required
+@permission_required()
 def update(game_id):
     game = game_repository.get_game_by_id(game_id) 
     if request.method == 'POST':
@@ -165,7 +165,7 @@ def update(game_id):
 
 @bp.route('/delete/<game_id>', methods=['GET'])
 @login_required
-@permission_required
+@permission_required()
 def delete(game_id):
     game_files = file_repository.get_files_by_game_id(game_id)
 
