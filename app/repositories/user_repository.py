@@ -7,11 +7,11 @@ class UserRepository:
     def __init__(self, db):
         self.db : SQLAlchemy = db
 
-    def create(self, username, password, role_name='default'):
+    def create(self, username, password, role_id):
         user = User(
             username=username,
             password_hash=sha256(password.encode()).hexdigest(),
-            role_name=role_name
+            role_id=role_id
         )
         try:
             self.db.session.add(user)

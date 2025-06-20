@@ -23,7 +23,7 @@ class User(Base, UserMixin):
     username: Mapped[str] = mapped_column(String(25), unique=True)
     password_hash: Mapped[str] = mapped_column(String(256))
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
-    role_name: Mapped[str] = mapped_column(ForeignKey('roles.name'))
+    role_id: Mapped[int] = mapped_column(ForeignKey('roles.id'))
 
 class Role(Base):
     __tablename__ = 'roles'

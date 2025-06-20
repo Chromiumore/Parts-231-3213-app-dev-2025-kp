@@ -1,9 +1,11 @@
 from flask import request, Blueprint, flash, render_template, redirect, url_for
 from flask_login import LoginManager, login_user, login_required, logout_user
 from .repositories.user_repository import UserRepository
+from .repositories.role_repository import RoleRepository
 from .models import db
 
 user_repository = UserRepository(db)
+role_repository = RoleRepository(db)
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -41,7 +43,8 @@ def registration():
         password_conf = request.form.get('password-confirm')
         remember_me = request.form.get('remember_me')
         if username and password and (password == password_conf):
-            user = user_repository.create(username, password, 'default')
+            default_role = role_repository.get_role_by_name('default')
+            user = user_repository.create(username, password, default_role.id)
             if user:
                 login_user(user, remember=remember_me)
                 flash('Вы успешно зарегистрировались.', 'success')
