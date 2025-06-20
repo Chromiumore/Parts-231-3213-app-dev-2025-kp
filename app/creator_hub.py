@@ -7,15 +7,15 @@ from .repositories.game_repository import GameRepository, Game
 from .repositories.user_repository import UserRepository
 from .repositories.os_repository import OSRepository
 from .repositories.file_repository import FileRepository, File
-from .repositories.visit_repository import VisitRepository
+from .repositories.stats_repository import StatsRepository
 from .models import db
-from .logging import permission_required
+from .tools import permission_required
 
 bp = Blueprint('creator_hub', __name__, url_prefix='/creator-hub')
 
 game_repository = GameRepository(db)
 file_repository = FileRepository(db)
-visit_repository = VisitRepository(db)
+stats_repositroy = StatsRepository(db)
 os_repository = OSRepository(db)
 user_repository = UserRepository(db)
 
@@ -30,11 +30,10 @@ def creator_hub():
     games_info = []
     games = game_repository.get_games_by_user_id(current_user.id)
     for game in games:
-        game_source = file_repository.get_source_by_game_id(game.id)
-        game_downloads = visit_repository.get_number_of_path_visits(url_for('uploads.send_uploaded_file', filename=game_source.storage_name))
-        game_views = visit_repository.get_number_of_path_visits(url_for('games.view_game', game_id=game.id))
+        game_downloads = stats_repositroy.get_downloads(game.id)
+        game_visits = stats_repositroy.get_visits(game.id)
         games_info.append([game, file_repository.get_main_image_by_game_id(game.id),
-                           os_repository.get_game_supported_os(game.id), game_downloads, game_views])
+                           os_repository.get_game_supported_os(game.id), game_downloads, game_visits])
     user = user_repository.get_user_by_id(current_user.id)
     return render_template('creator-hub.html', games_info=games_info, user=user)
 
@@ -59,6 +58,7 @@ def upload():
         os_list = list(map(os_repository.get_by_id, os_ids))
 
         created_game = game_repository.create(new_game, os_list)
+        stats_repositroy.create(created_game.id)
         
         m_img_storage_name = gen_storage_filename(main_image.filename)
         file_repository.create(File(
@@ -90,7 +90,7 @@ def upload():
 
         if created_game:
             flash('Игра успешно загружена', 'success')
-            return redirect(url_for('games.creator_hub'))
+            return redirect(url_for('creator_hub.creator_hub'))
         else:
             flash('Не удалось загрузить игру. Попробуйте позже', 'success')
     
@@ -154,7 +154,7 @@ def update(game_id):
 
             if created_game:
                 flash('Игра успешно загружена', 'success')
-                return redirect(url_for('games.creator_hub'))
+                return redirect(url_for('creator_hub.creator_hub'))
             else:
                 flash('Не удалось загрузить игру. Попробуйте позже', 'success')
 
@@ -179,4 +179,4 @@ def delete(game_id):
     else:
         flash('Не удалось удалить игру', 'error')
             
-    return redirect(url_for('games.creator_hub'))
+    return redirect(url_for('creator_hub.creator_hub'))

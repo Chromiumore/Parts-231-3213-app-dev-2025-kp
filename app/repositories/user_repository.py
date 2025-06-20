@@ -1,5 +1,6 @@
 from app.models import Game, User
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from hashlib import sha256
 
 class UserRepository:
@@ -34,4 +35,12 @@ class UserRepository:
     
     def get_author(self, game_id):
         query = self.db.select(User).join(Game, User.id == Game.user_id).where(Game.id == game_id)
+        return self.db.session.execute(query).scalar()
+    
+    def get_number_of_users(self):
+        query = self.db.select(func.count()).select_from(User)
+        return self.db.session.execute(query).scalar()
+    
+    def get_number_of_developers(self):
+        query = self.db.select(func.count(User.id.distinct())).select_from(User).join(Game, Game.user_id == User.id)
         return self.db.session.execute(query).scalar()

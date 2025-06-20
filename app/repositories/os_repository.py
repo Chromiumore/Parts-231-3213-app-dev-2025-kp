@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import or_, select
+from sqlalchemy import or_, func, label
 from app.models import OS, Game
 
 class OSRepository:

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-9">
+        <div class="mb-4">
+            <h2>Глобальная статистика</h2>
+        </div>
+
+        <!-- Краткая статистика -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="card-body text-center">
+                        <div class="stat-value text-primary">{{ total_games }}</div>
+                        <div class="text-muted">Всего игр</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="card-body text-center">
+                        <div class="stat-value text-success">{{ total_downloads }}</div>
+                        <div class="text-muted">Всего скачиваний</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="card-body text-center">
+                        <div class="stat-value text-warning">{{ total_users }}</div>
+                        <div class="text-muted">Всего пользователей</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="card-body text-center">
+                        <div class="stat-value text-info">{{ total_developers }}</div>
+                        <div class="text-muted">Всего разработчиков</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Графики -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card stat-card">
+                    <div class="card-header stat-card-header bg-primary text-white">
+                        <i class="fas fa-chart-bar me-2"></i>Топ-10 скачиваемых игр
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="topDownloadsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card stat-card">
+                    <div class="card-header stat-card-header bg-success text-white">
+                        <i class="fas fa-chart-bar me-2"></i>Топ-10 просматриваемых игр
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="topVisitedChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card stat-card">
+                    <div class="card-header stat-card-header bg-warning text-white">
+                        <i class="fas fa-chart-pie me-2"></i>Выбранные платформы
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="osChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var topDownloadedNames = {{ downloaded_names |safe}}
+    var topDownloadedNumbers = {{ downloaded_numbers |safe }}
+    var topVisitedNames = {{ visited_names |safe }}
+    var topVisitedNumbers = {{ visited_numbers |safe }}
+    var osNames = {{ os_names |safe }}
+    var osPercents = {{ os_percents |safe }}
+</script>
+<script src="{{ url_for('static', filename='global_stats.js') }}"></script>
+{% endblock %}
+
+
+{% endblock %}

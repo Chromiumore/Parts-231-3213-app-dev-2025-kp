@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional, List
 from flask_login import UserMixin
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import MetaData, String, ForeignKey, Text, Table, Column, Enum
+from sqlalchemy import MetaData, String, ForeignKey, Text, Table, Column, Enum, Integer
 from flask_sqlalchemy import SQLAlchemy
 
 class Base(DeclarativeBase):
@@ -77,3 +77,10 @@ class VisitLog(Base):
     path: Mapped[str] = mapped_column(String(100))
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.now)
+
+class GameStats(Base):
+    __tablename__ = 'games_stats'
+
+    game_id: Mapped[int] = mapped_column(ForeignKey(Game.id, ondelete='CASCADE'), primary_key=True)
+    visits: Mapped[int] = mapped_column(Integer, default=0)
+    downloads: Mapped[int] = mapped_column(Integer, default=0)
