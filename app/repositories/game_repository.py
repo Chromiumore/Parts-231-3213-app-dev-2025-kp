@@ -1,4 +1,4 @@
-from app.models import Game, User, VisitLog, File
+from app.models import Game, User, File
 from flask_sqlalchemy import SQLAlchemy
 from flask import url_for
 from sqlalchemy import func, and_, select, literal_column, text, distinct, Integer, cast, String

@@ -1,11 +1,9 @@
 from flask import Flask
 from flask_migrate import Migrate
-from . import games, auth, uploads, creator_hub, moderation, logging
+from . import games, auth, uploads, creator_hub, moderation
 from .models import db
-from .repositories.visit_repository import VisitRepository
 from .repositories.game_repository import GameRepository
 
-visit_repository = VisitRepository(db)
 game_repository = GameRepository(db)
 
 migrate = Migrate()
@@ -26,6 +24,5 @@ def create_app():
     app.register_blueprint(uploads.bp)
     app.register_blueprint(creator_hub.bp)
     app.register_blueprint(moderation.bp)
-    app.register_blueprint(logging.bp)
 
     return app

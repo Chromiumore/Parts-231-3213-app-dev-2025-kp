@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, url_for, redirect, flash
 from flask_login import login_required
 from .models import db
-from .repositories.visit_repository import VisitRepository
 from .repositories.game_repository import GameRepository
 from .repositories.user_repository import UserRepository
 from .repositories.stats_repository import StatsRepository
